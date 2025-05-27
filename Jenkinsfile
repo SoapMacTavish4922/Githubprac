@@ -1,23 +1,35 @@
 pipeline {
     agent any
+
     stages {
         stage('Clone') {
             steps {
-                echo 'Cloning repo...'
+                echo 'Cloning the repository...'
                 checkout scm
             }
         }
+
         stage('Build') {
             steps {
-                echo 'Building the project...'
-                // Replace with actual build commands (e.g., `make`, `npm install`, etc.)
+                echo 'Building the Java project using Maven...'
+                sh 'mvn clean compile'
             }
         }
+
         stage('Test') {
             steps {
-                echo 'Running tests...'
-                // Replace with actual test commands
+                echo 'Running unit tests using Maven...'
+                sh 'mvn test'
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Build and tests completed successfully!'
+        }
+        failure {
+            echo 'Build or tests failed.'
         }
     }
 }
